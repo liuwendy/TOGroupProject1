@@ -76,6 +76,23 @@ tele_test <- tele_norm[test_set, -match("yyes",names(tele_norm))]
 tele_train_labels <- tele_norm[-test_set, "yyes"]
 tele_test_labels <- tele_norm[test_set, "yyes"]
 
+#Lets run the KNN command
+library(class)
+library(caret)
+
+#Run KNN on train data, create predictions for test data
+#Starting K value close to sqrt(nrow(alcohol2_train))
+sqrt(nrow(tele_train))
+
+tele_test_pred <- knn(train = tele_train, test = tele_test,
+                      cl = tele_train_labels, k=177)
+
+#Evaluate model results
+library(gmodels)
+CrossTable(x = tele_test_labels, y = tele_test_pred, prop.chisq=FALSE)
+
+confusionMatrix(as.factor(tele_test_pred), as.factor(tele_test_labels), positive = "1")
+
 ```
 
 > Now you are ready to build your ANN model. Feel free to modify the data load, cleaning and preparation code above as per your preference.
@@ -144,5 +161,17 @@ prediction <- predict(model, tele_test_log)
 yyes_pred <- ifelse(prediction < 0.5, 0, 1)
 
 CrossTable(x = tele_test_log$yyes, y = yyes_pred, prop.chisq=FALSE)
+
+```
+
+## Alternative Logisitic Regression
+```{r}
+firstmodel <- glm(yyes ~ age + defaultunknown + contacttelephone + monthaug + 
+                    monthdec + monthjun + monthmar + monthmay + monthnov + 
+                    day_of_weekmon + day_of_weekwed + campaign + 
+                    poutcomenonexistent + poutcomesuccess + emp.var.rate + 
+                    cons.price.idx + cons.conf.idx + nr.employed + pdaysdummy, 
+                    data = tele_norm, family = "binomial")
+summary(firstmodel)
 ```
 
