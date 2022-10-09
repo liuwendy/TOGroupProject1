@@ -85,7 +85,7 @@ library(caret)
 sqrt(nrow(tele_train))
 
 tele_test_pred <- knn(train = tele_train, test = tele_test,
-                      cl = tele_train_labels, k=177)
+                      cl = tele_train_labels, k=182)
 
 #Evaluate model results
 library(gmodels)
