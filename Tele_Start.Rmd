@@ -123,7 +123,7 @@ ANN_model_tele <- neuralnet(formula = yyes~.,
 # obtain model results
 ##model_results <- compute(ANN_model_tele, tele_test[1:51])
 ann_prediction <- predict(ANN_model_tele, tele_test)
-yyes_pred <- ifelse(ann_prediction < 0.5, 0, 1)
+yyes_pred_ANN <- ifelse(ann_prediction < 0.5, 0, 1)
 
 library(gmodels)
 library(caret)
