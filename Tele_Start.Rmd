@@ -28,11 +28,11 @@ tele$duration <- NULL
 tele$X <- NULL
 
 # Changing pdays to a dummy and deleting pdays
+# 0 = never called, 1 = called before
 tele$pdaysdummy <- ifelse(tele$pdays == 999, 0, 1)
 tele$pdays <- NULL
 
 str(tele)
-
 ```
 
 ## Getting Data Ready for Analysis
@@ -58,12 +58,12 @@ tele_norm <- as.data.frame(lapply(tele_random, normalize))
 ```
 
 
-## Getting Train and Test Samples for KNN
+## Getting Train and Test Samples (KNN)
 
 ```{r}
 # Selects 10000 random rows for test data
 set.seed(12345)
-test_set <- sample(1:nrow(tele_norm), 8000) 
+test_set <- sample(1:nrow(tele_norm), 10000) 
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
 
@@ -71,6 +71,9 @@ test_set <- sample(1:nrow(tele_norm), 8000)
 #First the predictors - all columns except the yyes column
 tele_train <- tele_norm[-test_set, -match("yyes",names(tele_norm))]
 tele_test <- tele_norm[test_set, -match("yyes",names(tele_norm))]
+
+# tele_train$yyes <- NULL
+# tele_test$yyes <- NULL
 
 #Now the response (aka Labels) - only the yyes column
 tele_train_labels <- tele_norm[-test_set, "yyes"]
@@ -84,101 +87,67 @@ library(caret)
 #Starting K value close to sqrt(nrow(alcohol2_train))
 sqrt(nrow(tele_train))
 
-tele_test_pred <- knn(train = tele_train, test = tele_test,
-                      cl = tele_train_labels, k=182)
+KNN_tele_model <- knn(train = tele_train, test = tele_test,
+                      cl = tele_train_labels, k=177)
 
-tele_test_pred_KNN <- ifelse(prediction < 0.5, 0, 1)
-print(tele_test_pred_KNN)
+KNN_yyes_pred <- ifelse(KNN_tele_model == "0", 0, 1)
+
 #Evaluate model results
 library(gmodels)
-CrossTable(x = tele_test_labels, y = tele_test_pred, prop.chisq=FALSE)
+CrossTable(x = tele_test_labels, y = KNN_tele_model, prop.chisq=FALSE)
 
-confusionMatrix(as.factor(tele_test_pred), as.factor(tele_test_labels), positive = "1")
+confusionMatrix(as.factor(KNN_tele_model), as.factor(tele_test_labels), positive = "1")
 
 ```
 
 > Now you are ready to build your ANN model. Feel free to modify the data load, cleaning and preparation code above as per your preference.
 
-```{r, cache=TRUE}
-# train the neuralnet model
+## Build an ANN model
+```{r, cache = TRUE} 
+test_set <- sample(1:nrow(tele_norm), 10000) 
+
+tele_norm_train <- tele_norm[-test_set, ]
+tele_norm_test <- tele_norm[test_set, ]
+
 library(neuralnet)
 
-
-set.seed(4321)
-
-test_set <- sample(1:nrow(tele_norm), 8000) 
-
-# Create a train set and test set
-#First the predictors
-tele_train <- tele_norm[-test_set, ]
-tele_test <- tele_norm[test_set, ]
-
-
 # simple ANN with only a single hidden neuron
-ANN_model_tele <- neuralnet(formula = yyes~.,
-                              data = tele_train)
+ANN_tele_model <- neuralnet(formula = yyes ~. ,
+                              data = tele_norm_train)
 
-# visualize the network topology
-#plot(ANN_model_tele)
+model_results <- compute(ANN_tele_model, tele_norm_test[1:53])
 
-## Step 4: Evaluating model performance ----
-# obtain model results
-##model_results <- compute(ANN_model_tele, tele_test[1:51])
-ann_prediction <- predict(ANN_model_tele, tele_test)
-yyes_pred_ANN <- ifelse(ann_prediction < 0.5, 0, 1)
+predicted_y <- model_results$net.result
+
+prediction <-predict(ANN_tele_model, tele_norm_test)
+
+prediction
+
+ANN_yyes_pred <- ifelse(prediction < 0.5, 0, 1)
 
 library(gmodels)
 library(caret)
 
-tele_test$prediction <- predict(ANN_model_tele, tele_test)
+CrossTable(x = tele_norm_test$yyes, y = ANN_yyes_pred, prop.chisq=FALSE)
 
-CrossTable(x = tele_test$yyes, y = yyes_pred_ANN, prop.chisq=FALSE)
+confusionMatrix(as.factor(ANN_yyes_pred), as.factor(tele_norm_test$yyes), positive = "1")
 
-confusionMatrix(as.factor(yyes_pred), as.factor(tele_test$yyes), positive = "1")
+
 ```
 
-
-## Logistic Regression Model
+## Logistic Regrssion Model
 
 ```{r}
 #Set a seed for random number generator for consistent output
-set.seed(123)
-
-#Selects 100 random rows for test data
-test_set <- sample(1:nrow(tele_norm), 8000) 
+test_set <- sample(1:nrow(tele_norm), 10000) 
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
-
 # Create a train set and test set
 #First the predictors
 tele_train_log <- tele_norm[-test_set, ]
 tele_test_log <- tele_norm[test_set, ]
-
 library(gmodels)
 library(caret)
-
-model <- glm(yyes ~ ., data = tele_train_log, family = "binomial")
-
-prediction <- predict(model, tele_test_log)
-yyes_pred_log <- ifelse(prediction < 0.5, 0, 1)
-
-CrossTable(x = tele_test_log$yyes, y = yyes_pred, prop.chisq=FALSE)
-
-```
-
-## Majority Vote Classification
-
-```{r}
-all <- yyes_pred_log + yyes_pred_ANN + tele_test_pred_KNN
-
-all <- ifelse(prediction < 2, 0, 1)
-
-all
-```
-
-
-## Alternative Logisitic Regression
-```{r}
 firstmodel <- glm(yyes ~ age + jobblue.collar + jobservices + maritalsingle + defaultunknown +
                     contacttelephone + monthaug + 
                     monthdec + monthjun + monthmar + monthmay + monthnov + monthdec +
@@ -188,13 +157,18 @@ firstmodel <- glm(yyes ~ age + jobblue.collar + jobservices + maritalsingle + de
                     jobblue.collar*emp.var.rate + campaign*poutcomesuccess + campaign*nr.employed, 
                     data = tele_norm, family = "binomial")
 summary(firstmodel)
+
+prediction <- predict(firstmodel, tele_test_log)
+LOG_yyes_pred <- ifelse(prediction < 0.5, 0, 1)
+CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred, prop.chisq=FALSE)
+confusionMatrix(as.factor(LOG_yyes_pred), as.factor(tele_test_log$yyes), positive = "1")
+
+
 ```
+
+## Majority Vote Classification
 ```{r}
-firstprediction <- predict(firstmodel, tele_test_log)
-first_yyes_pred <- ifelse(firstprediction < 0.5, 0, 1)
-
-CrossTable(x = tele_test_log$yyes, y = first_yyes_pred, prop.chisq=FALSE)
-
-confusionMatrix(as.factor(first_yyes_pred), as.factor(tele_test_log$yyes), positive = "1")
+all <- KNN_yyes_pred + ANN_yyes_pred + LOG_yyes_pred
+print(all)
 ```
 
