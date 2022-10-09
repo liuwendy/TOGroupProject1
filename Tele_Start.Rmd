@@ -177,3 +177,24 @@ all
 ```
 
 
+## Alternative Logisitic Regression
+```{r}
+firstmodel <- glm(yyes ~ age + jobblue.collar + jobservices + maritalsingle + defaultunknown +
+                    contacttelephone + monthaug + 
+                    monthdec + monthjun + monthmar + monthmay + monthnov + monthdec +
+                    day_of_weekmon + day_of_weekwed + campaign + 
+                    poutcomenonexistent + poutcomesuccess + emp.var.rate + 
+                    cons.price.idx + cons.conf.idx + nr.employed + pdaysdummy + maritalsingle*age +
+                    jobblue.collar*emp.var.rate + campaign*poutcomesuccess + campaign*nr.employed, 
+                    data = tele_norm, family = "binomial")
+summary(firstmodel)
+```
+```{r}
+firstprediction <- predict(firstmodel, tele_test_log)
+first_yyes_pred <- ifelse(firstprediction < 0.5, 0, 1)
+
+CrossTable(x = tele_test_log$yyes, y = first_yyes_pred, prop.chisq=FALSE)
+
+confusionMatrix(as.factor(first_yyes_pred), as.factor(tele_test_log$yyes), positive = "1")
+```
+
