@@ -164,14 +164,4 @@ CrossTable(x = tele_test_log$yyes, y = yyes_pred, prop.chisq=FALSE)
 
 ```
 
-## Alternative Logisitic Regression
-```{r}
-firstmodel <- glm(yyes ~ age + defaultunknown + contacttelephone + monthaug + 
-                    monthdec + monthjun + monthmar + monthmay + monthnov + 
-                    day_of_weekmon + day_of_weekwed + campaign + 
-                    poutcomenonexistent + poutcomesuccess + emp.var.rate + 
-                    cons.price.idx + cons.conf.idx + nr.employed + pdaysdummy, 
-                    data = tele_norm, family = "binomial")
-summary(firstmodel)
-```
 
