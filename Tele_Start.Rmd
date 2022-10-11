@@ -168,7 +168,10 @@ confusionMatrix(as.factor(LOG_yyes_pred), as.factor(tele_test_log$yyes), positiv
 
 ## Majority Vote Classification
 ```{r}
-all <- KNN_yyes_pred + ANN_yyes_pred + LOG_yyes_pred
+KNN <- KNN_yyes_pred 
+ANN <- ANN_yyes_pred
+LOG <- LOG_yyes_pred
+all <- data.frame(KNN, ANN, LOG)
 print(all)
 ```
 
