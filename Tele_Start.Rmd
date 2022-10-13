@@ -176,10 +176,11 @@ print(all)
 ```
 ## KMeans Clustering
 ```{r}
-interests <- tele_norm[1:52]
-interests_z <- as.data.frame(lapply(interests, scale))
+tele_predictors <- tele_norm[, -match("yyes", names(tele_norm))]
+#interests_z <- as.data.frame(lapply(interests, scale))
+tele_labels <- tele_norm[, match("yyes", names(tele_norm))]
 
-tele_clusters <- kmeans(interests_z, 5)
+tele_clusters <- kmeans(tele_predictors, 5)
 
 # look at the size of the clusters
 tele_clusters$size
@@ -187,27 +188,13 @@ tele_clusters$size
 # look at the cluster centers
 tele_clusters$centers
 
-# apply the cluster IDs to the original data frame
-tele$cluster <- tele_clusters$cluster
+# tele_predictors
+tele_predictors$cluster <- tele_clusters$cluster
+tele_predictors$yyes <- tele_labels
 
-kmeans.wss.k <- function(interests_z, k){
-  km = kmeans(interests_z, k)
-  return (km$tot.withinss)
-}
+aggregate(data = tele_predictors, yyes ~ cluster, mean)
 
-kmeans.wss.k(interests_z, 5)
-kmeans.wss.k(interests_z, 4)
-
-kmeans.dis <- function(data_z, maxk){
-  dis=(nrow(data_z)-1)*sum(apply(data_z,2,var))
-  dis[2:maxk]=sapply (2:maxk, kmeans.wss.k, interests_z=interests_z)
-  return(dis) }
-
-maxk = 30
-dis = kmeans.dis(interests_z, maxk)
-
-plot(1:maxk, dis, type='b', xlab="Number of Clusters", ylab="Distortion", col="blue")
-
-
+predictorscluster2 <- tele_predictors$cluster == 2
+cluster2<- as.data.frame(predictorscluster2)
+cluster2
 ```
-
