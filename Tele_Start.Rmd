@@ -57,12 +57,42 @@ normalize <- function(x) {
 tele_norm <- as.data.frame(lapply(tele_random, normalize))
 ```
 
+## KMeans Clustering
+```{r}
+set.seed(12345)
+
+tele_predictors <- tele_norm[, -match("yyes", names(tele_norm))]
+#interests_z <- as.data.frame(lapply(interests, scale))
+tele_labels <- tele_norm[, match("yyes", names(tele_norm))]
+
+tele_clusters <- kmeans(tele_predictors, 5)
+
+# look at the size of the clusters
+tele_clusters$size
+
+# look at the cluster centers
+tele_clusters$centers
+
+# tele_predictors
+tele_predictors$cluster <- tele_clusters$cluster
+tele_predictors$yyes <- tele_labels
+
+clustertable <- aggregate(data = tele_predictors, yyes ~ cluster, mean)
+
+#tele_predictors$cluster4 <- (tele_predictors$cluster == 4)
+#tele_predictors$cluster4 <- ifelse(tele_predictors$cluster4 == "TRUE", 1,0)
+
+# calculate how many individuals belong to cluster 4
+sum(tele_predictors$cluster == 4)
+
+# calculate how many percent of individuals in cluster actually purchase
+(sum(tele_predictors$cluster == 4))*(0.23184323)
+```
 
 ## Getting Train and Test Samples (KNN)
 
 ```{r}
 # Selects 10000 random rows for test data
-set.seed(12345)
 test_set <- sample(1:nrow(tele_norm), 10000) 
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
@@ -173,29 +203,4 @@ ANN <- ANN_yyes_pred
 LOG <- LOG_yyes_pred
 all <- data.frame(KNN, ANN, LOG)
 print(all)
-```
-## KMeans Clustering
-```{r}
-tele_predictors <- tele_norm[, -match("yyes", names(tele_norm))]
-#interests_z <- as.data.frame(lapply(interests, scale))
-tele_labels <- tele_norm[, match("yyes", names(tele_norm))]
-
-tele_clusters <- kmeans(tele_predictors, 5)
-
-# look at the size of the clusters
-tele_clusters$size
-
-# look at the cluster centers
-tele_clusters$centers
-
-# tele_predictors
-tele_predictors$cluster <- tele_clusters$cluster
-tele_predictors$yyes <- tele_labels
-
-aggregate(data = tele_predictors, yyes ~ cluster, mean)
-
-predictorscluster2 <- tele_predictors$cluster == 2
-cluster2<- as.data.frame(predictorscluster2)
-cluster2
-(cluster2 == TRUE).count
 ```
