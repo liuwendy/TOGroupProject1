@@ -197,4 +197,5 @@ aggregate(data = tele_predictors, yyes ~ cluster, mean)
 predictorscluster2 <- tele_predictors$cluster == 2
 cluster2<- as.data.frame(predictorscluster2)
 cluster2
+(cluster2 == TRUE).count
 ```
