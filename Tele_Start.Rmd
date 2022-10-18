@@ -120,6 +120,7 @@ sqrt(nrow(tele_train))
 KNN_tele_model <- knn(train = tele_train, test = tele_test,
                       cl = tele_train_labels, k=177)
 
+KNN_prediction <- KNN_tele_model
 KNN_yyes_pred <- ifelse(KNN_tele_model == "0", 0, 1)
 
 #Evaluate model results
@@ -151,8 +152,7 @@ predicted_y <- model_results$net.result
 
 prediction <-predict(ANN_tele_model, tele_norm_test)
 
-prediction
-
+ANN_prediction <- prediction
 ANN_yyes_pred <- ifelse(prediction < 0.5, 0, 1)
 
 library(gmodels)
@@ -189,6 +189,7 @@ firstmodel <- glm(yyes ~ age + jobblue.collar + jobservices + maritalsingle + de
 summary(firstmodel)
 
 prediction <- predict(firstmodel, tele_test_log)
+LOG_prediction <- prediction
 LOG_yyes_pred <- ifelse(prediction < 0.5, 0, 1)
 CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred, prop.chisq=FALSE)
 confusionMatrix(as.factor(LOG_yyes_pred), as.factor(tele_test_log$yyes), positive = "1")
@@ -202,5 +203,8 @@ KNN <- KNN_yyes_pred
 ANN <- ANN_yyes_pred
 LOG <- LOG_yyes_pred
 all <- data.frame(KNN, ANN, LOG)
+all_prediction <- KNN_yyes_pred + ANN_yyes_pred + LOG_yyes_pred
+final <- ifelse(all_prediction >= 1, 1, 0)
+final
 print(all)
 ```
