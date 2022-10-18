@@ -78,6 +78,7 @@ tele_predictors$cluster <- tele_clusters$cluster
 tele_predictors$yyes <- tele_labels
 
 clustertable <- aggregate(data = tele_predictors, yyes ~ cluster, mean)
+clustertable
 
 #tele_predictors$cluster4 <- (tele_predictors$cluster == 4)
 #tele_predictors$cluster4 <- ifelse(tele_predictors$cluster4 == "TRUE", 1,0)
@@ -88,6 +89,7 @@ sum(tele_predictors$cluster == 4)
 # calculate how many percent of individuals in cluster actually purchase
 (sum(tele_predictors$cluster == 4))*(0.23184323)
 ```
+
 
 ## Getting Train and Test Samples (KNN)
 
@@ -197,6 +199,19 @@ confusionMatrix(as.factor(LOG_yyes_pred), as.factor(tele_test_log$yyes), positiv
 
 ```
 
+```{r}
+#table(tele_predictors$cluster == 4)
+
+tele_predictors$cluster <- ifelse(tele_predictors$cluster != 4, NA, tele_predictors$cluster)
+tele_predictors4 <- na.omit(tele_predictors)
+
+clusterpred4 <- predict(firstmodel, tele_predictors4)
+
+LOG_yyes_pred4 <- ifelse(prediction < 0.5, 0, 1)
+CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred4, prop.chisq=FALSE)
+confusionMatrix(as.factor(LOG_yyes_pred4), as.factor(tele_test_log$yyes), positive = "1")
+```
+
 ## Majority Vote Classification
 ```{r}
 KNN <- KNN_yyes_pred 
@@ -208,3 +223,4 @@ final <- ifelse(all_prediction >= 1, 1, 0)
 final
 print(all)
 ```
+
