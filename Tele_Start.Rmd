@@ -202,10 +202,18 @@ confusionMatrix(as.factor(LOG_yyes_pred), as.factor(tele_test_log$yyes), positiv
 ```{r}
 #table(tele_predictors$cluster == 4)
 
-tele_predictors$cluster <- ifelse(tele_predictors$cluster != 4, NA, tele_predictors$cluster)
-tele_predictors4 <- na.omit(tele_predictors)
+# tele_predictors$cluster <- ifelse(tele_predictors$cluster != 4, NA, tele_predictors$cluster)
+tele_predictors1 <- tele_predictors[tele_clusters$cluster == 1,]
+tele_predictors2 <- tele_predictors[tele_clusters$cluster == 2,]
+tele_predictors3 <- tele_predictors[tele_clusters$cluster == 3,]
+tele_predictors4 <- tele_predictors[tele_clusters$cluster == 4,]
+tele_predictors5 <- tele_predictors[tele_clusters$cluster == 5,]
 
+clusterpred1 <- predict(firstmodel, tele_predictors1)
+clusterpred2 <- predict(firstmodel, tele_predictors2)
+clusterpred3 <- predict(firstmodel, tele_predictors3)
 clusterpred4 <- predict(firstmodel, tele_predictors4)
+clusterpred5 <- predict(firstmodel, tele_predictors5)
 
 LOG_yyes_pred4 <- ifelse(prediction < 0.5, 0, 1)
 CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred4, prop.chisq=FALSE)
