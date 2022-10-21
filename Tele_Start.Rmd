@@ -600,15 +600,16 @@ Per 100 customers in group 4
 
 Per 100 customers in group 3
 9653/21274 (45.4) is the percentage of people we can expect in cluster 3
-156/693 is the buy rate
-10.2 buy
+.4787 is the buy rate
+21.7 buy
 
 Per 100 customers in group 5
 3456/21274 (16.2) is the percentage of people we can expect in cluster 5
-36/192 is the buy rate
-3.0 buy
+.47 is the buy rate
+7.6 buy
 
-total out of 100 -> 22.1 buy
+total out of 100 -> 38.2 buy
 
 for 41k calls in the to be state:
--> 41000(-1) + 9061(6) = 13366 profit
+-> 41000(-1) + 15662(6) = 52972 profit using the ANN model on clusters 3 and 5 and calling all in 4
+                          13366 profit using voting scheme on clusters 3 and 5 and calling all in 4
