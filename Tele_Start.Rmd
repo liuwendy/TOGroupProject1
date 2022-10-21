@@ -215,9 +215,23 @@ clusterpred3 <- predict(firstmodel, tele_predictors3)
 clusterpred4 <- predict(firstmodel, tele_predictors4)
 clusterpred5 <- predict(firstmodel, tele_predictors5)
 
-LOG_yyes_pred4 <- ifelse(prediction < 0.5, 0, 1)
-CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred4, prop.chisq=FALSE)
-confusionMatrix(as.factor(LOG_yyes_pred4), as.factor(tele_test_log$yyes), positive = "1")
+LOG_yyes_pred1 <- ifelse(clusterpred1 < 0.5, 0, 1)
+# CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred1, prop.chisq=FALSE)
+# confusionMatrix(as.factor(LOG_yyes_pred1), as.factor(tele_test_log$yyes), positive = "1")
+
+LOG_yyes_pred2 <- ifelse(clusterpred2 < 0.5, 0, 1)
+# CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred2, prop.chisq=FALSE)
+# confusionMatrix(as.factor(LOG_yyes_pred2), as.factor(tele_test_log$yyes), positive = "1")
+
+LOG_yyes_pred3 <- ifelse(clusterpred3 < 0.5, 0, 1)
+# CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred4, prop.chisq=FALSE)
+# confusionMatrix(as.factor(LOG_yyes_pred4), as.factor(tele_test_log$yyes), positive = "1")
+
+LOG_yyes_pred4 <- ifelse(clusterpred4 < 0.5, 0, 1)
+LOG_yyes_pred5 <- ifelse(clusterpred5 < 0.5, 0, 1)
+
+# CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred4, prop.chisq=FALSE)
+# confusionMatrix(as.factor(LOG_yyes_pred4), as.factor(tele_test_log$yyes), positive = "1")
 ```
 
 ## Majority Vote Classification
@@ -226,9 +240,10 @@ KNN <- KNN_yyes_pred
 ANN <- ANN_yyes_pred
 LOG <- LOG_yyes_pred
 all <- data.frame(KNN, ANN, LOG)
-all_prediction <- KNN_yyes_pred + ANN_yyes_pred + LOG_yyes_pred
-final <- ifelse(all_prediction >= 1, 1, 0)
-final
-print(all)
+all$all_prediction <- KNN_yyes_pred + ANN_yyes_pred + LOG_yyes_pred
+all$all_prediction <- ifelse(all$all_prediction >= 1, 1, 0)
+
+CrossTable(x = tele_test_log$yyes, y = all$all_prediction, prop.chisq=FALSE)
+confusionMatrix(as.factor(all$all_prediction), as.factor(tele_test_log$yyes), positive = "1")
 ```
 
