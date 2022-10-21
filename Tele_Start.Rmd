@@ -577,3 +577,38 @@ confusionMatrix(as.factor(all5$all_prediction), as.factor(tele_test_log$yyes), p
 
 ```
 
+
+## Conclusion
+
+- ANN models are better due to success % but we wanted to use combined to get the most calls
+- Also wanted to lower false negative rate because that is revenue lost
+- We can see with all the models, clusters 1 and 2 are very poor, so consider not calling them
+- Call everyone in cluster 4
+- In clusters 3 and 5 use the predictive models created to call with success rate of > 20% which is profitable
+
+Current State:
+41k
+5k success
+-> 41000*(-1) + 5000(6) = -11000
+
+To Be State:
+Per 100 customers in group 4
+8165/21274 (38.4) is the percentage of people we can expect in cluster 4
+0.23184323 is the buy rate
+8.9 buy
+
+
+Per 100 customers in group 3
+9653/21274 (45.4) is the percentage of people we can expect in cluster 3
+156/693 is the buy rate
+10.2 buy
+
+Per 100 customers in group 5
+3456/21274 (16.2) is the percentage of people we can expect in cluster 5
+36/192 is the buy rate
+3.0 buy
+
+total out of 100 -> 22.1 buy
+
+for 41k calls in the to be state:
+-> 41000(-1) + 9061(6) = 13366 profit
