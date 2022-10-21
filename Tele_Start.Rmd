@@ -103,7 +103,7 @@ sum(tele_predictors$cluster == 4)
 
 ```{r}
 # Selects 10000 random rows for test data
-test_set1 <- sample(1:nrow(tele_cluster1), 1000)
+test_set1 <- sample(1:nrow(tele_cluster1), 2500)
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
 
@@ -144,7 +144,7 @@ confusionMatrix(as.factor(KNN_tele_model), as.factor(tele_test_labels), positive
 
 ## Build an ANN Model Cluster 1
 ```{r, cache = TRUE} 
-test_set1 <- sample(1:nrow(tele_cluster1), 1000) 
+test_set1 <- sample(1:nrow(tele_cluster1), 2500) 
 
 tele_norm_train <- tele_cluster1[-test_set1, ]
 tele_norm_test <- tele_cluster1[test_set1, ]
@@ -162,7 +162,7 @@ predicted_y <- model_results$net.result
 prediction <-predict(ANN_tele_model, tele_norm_test)
 
 ANN_prediction <- prediction
-ANN_yyes_pred_1 <- ifelse(prediction < 0.5, 0, 1)
+ANN_yyes_pred_1 <- ifelse(prediction < 0.2, 0, 1)
 
 library(gmodels)
 library(caret)
@@ -178,7 +178,7 @@ confusionMatrix(as.factor(ANN_yyes_pred_1), as.factor(tele_norm_test$yyes), posi
 
 ```{r}
 #Set a seed for random number generator for consistent output
-test_set <- sample(1:nrow(tele_cluster1), 1000) 
+test_set <- sample(1:nrow(tele_cluster1), 2500) 
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
 # Create a train set and test set
@@ -211,7 +211,7 @@ ANN <- ANN_yyes_pred_1
 LOG <- LOG_yyes_pred_1
 all1 <- data.frame(KNN, ANN, LOG)
 all1$all_prediction <- KNN_yyes_pred_1 + ANN_yyes_pred_1 + LOG_yyes_pred_1
-all1$all_prediction <- ifelse(all$all_prediction >= 1, 1, 0)
+all1$all_prediction <- ifelse(all1$all_prediction >= 1, 1, 0)
 
 CrossTable(x = tele_test_log$yyes, y = all1$all_prediction, prop.chisq=FALSE)
 confusionMatrix(as.factor(all1$all_prediction), as.factor(tele_test_log$yyes), positive = "1")
@@ -221,7 +221,7 @@ confusionMatrix(as.factor(all1$all_prediction), as.factor(tele_test_log$yyes), p
 
 ```{r}
 # Selects 10000 random rows for test data
-test_set2 <- sample(1:nrow(tele_cluster2), 950)
+test_set2 <- sample(1:nrow(tele_cluster2), 2500)
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
 
@@ -262,7 +262,7 @@ confusionMatrix(as.factor(KNN_tele_model), as.factor(tele_test_labels), positive
 
 ## Build an ANN Model Cluster 2
 ```{r, cache = TRUE} 
-test_set2 <- sample(1:nrow(tele_cluster2), 950) 
+test_set2 <- sample(1:nrow(tele_cluster2), 2500) 
 
 tele_norm_train <- tele_cluster2[-test_set2, ]
 tele_norm_test <- tele_cluster2[test_set2, ]
@@ -296,7 +296,7 @@ confusionMatrix(as.factor(ANN_yyes_pred_2), as.factor(tele_norm_test$yyes), posi
 
 ```{r}
 #Set a seed for random number generator for consistent output
-test_set <- sample(1:nrow(tele_cluster2), 950) 
+test_set <- sample(1:nrow(tele_cluster2), 2500) 
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
 # Create a train set and test set
@@ -341,7 +341,7 @@ confusionMatrix(as.factor(all2$all_prediction), as.factor(tele_test_log$yyes), p
 
 ```{r}
 # Selects 10000 random rows for test data
-test_set3 <- sample(1:nrow(tele_cluster3), 950)
+test_set3 <- sample(1:nrow(tele_cluster3), 2500)
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
 
@@ -382,7 +382,7 @@ confusionMatrix(as.factor(KNN_tele_model), as.factor(tele_test_labels), positive
 
 ## Build an ANN Model Cluster 3
 ```{r, cache = TRUE} 
-test_set3 <- sample(1:nrow(tele_cluster3), 950) 
+test_set3 <- sample(1:nrow(tele_cluster3), 2500) 
 
 tele_norm_train <- tele_cluster3[-test_set3, ]
 tele_norm_test <- tele_cluster3[test_set3, ]
@@ -416,7 +416,7 @@ confusionMatrix(as.factor(ANN_yyes_pred_3), as.factor(tele_norm_test$yyes), posi
 
 ```{r}
 #Set a seed for random number generator for consistent output
-test_set <- sample(1:nrow(tele_cluster2), 950) 
+test_set <- sample(1:nrow(tele_cluster2), 2500) 
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
 # Create a train set and test set
@@ -461,7 +461,7 @@ confusionMatrix(as.factor(all3$all_prediction), as.factor(tele_test_log$yyes), p
 
 ```{r}
 # Selects 10000 random rows for test data
-test_set5 <- sample(1:nrow(tele_cluster5), 350)
+test_set5 <- sample(1:nrow(tele_cluster5), 1000)
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
 
@@ -502,7 +502,7 @@ confusionMatrix(as.factor(KNN_tele_model), as.factor(tele_test_labels), positive
 
 ## Build an ANN Model Cluster 5
 ```{r, cache = TRUE} 
-test_set5 <- sample(1:nrow(tele_cluster5), 350) 
+test_set5 <- sample(1:nrow(tele_cluster5), 1000) 
 
 tele_norm_train <- tele_cluster5[-test_set5, ]
 tele_norm_test <- tele_cluster5[test_set5, ]
@@ -536,7 +536,7 @@ confusionMatrix(as.factor(ANN_yyes_pred_5), as.factor(tele_norm_test$yyes), posi
 
 ```{r}
 #Set a seed for random number generator for consistent output
-test_set <- sample(1:nrow(tele_cluster5), 350) 
+test_set <- sample(1:nrow(tele_cluster5), 1000) 
 # Depending on R-version and computer, different rows may be selected. 
 # If that happens, results are different. 
 # Create a train set and test set
@@ -576,43 +576,4 @@ CrossTable(x = tele_test_log$yyes, y = all5$all_prediction, prop.chisq=FALSE)
 confusionMatrix(as.factor(all5$all_prediction), as.factor(tele_test_log$yyes), positive = "1")
 
 ```
-
-
-```{r}
-
-#table(tele_predictors$cluster == 4)
-
-# tele_predictors$cluster <- ifelse(tele_predictors$cluster != 4, NA, tele_predictors$cluster)
-tele_predictors1 <- tele_predictors[tele_clusters$cluster == 1,]
-tele_predictors2 <- tele_predictors[tele_clusters$cluster == 2,]
-tele_predictors3 <- tele_predictors[tele_clusters$cluster == 3,]
-tele_predictors4 <- tele_predictors[tele_clusters$cluster == 4,]
-tele_predictors5 <- tele_predictors[tele_clusters$cluster == 5,]
-
-clusterpred1 <- predict(firstmodel, tele_predictors1)
-clusterpred2 <- predict(firstmodel, tele_predictors2)
-clusterpred3 <- predict(firstmodel, tele_predictors3)
-clusterpred4 <- predict(firstmodel, tele_predictors4)
-clusterpred5 <- predict(firstmodel, tele_predictors5)
-
-LOG_yyes_pred1 <- ifelse(clusterpred1 < 0.5, 0, 1)
-# CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred1, prop.chisq=FALSE)
-# confusionMatrix(as.factor(LOG_yyes_pred1), as.factor(tele_test_log$yyes), positive = "1")
-
-LOG_yyes_pred2 <- ifelse(clusterpred2 < 0.5, 0, 1)
-# CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred2, prop.chisq=FALSE)
-# confusionMatrix(as.factor(LOG_yyes_pred2), as.factor(tele_test_log$yyes), positive = "1")
-
-LOG_yyes_pred3 <- ifelse(clusterpred3 < 0.5, 0, 1)
-# CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred4, prop.chisq=FALSE)
-# confusionMatrix(as.factor(LOG_yyes_pred4), as.factor(tele_test_log$yyes), positive = "1")
-
-LOG_yyes_pred4 <- ifelse(clusterpred4 < 0.5, 0, 1)
-LOG_yyes_pred5 <- ifelse(clusterpred5 < 0.5, 0, 1)
-
-# CrossTable(x = tele_test_log$yyes, y = LOG_yyes_pred4, prop.chisq=FALSE)
-# confusionMatrix(as.factor(LOG_yyes_pred4), as.factor(tele_test_log$yyes), positive = "1")
-```
-
-
 
