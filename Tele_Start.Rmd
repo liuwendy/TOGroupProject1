@@ -581,6 +581,7 @@ confusionMatrix(as.factor(all5$all_prediction), as.factor(tele_test_log$yyes), p
 ## Conclusion
 
 - ANN models are better due to success % but we wanted to use combined to get the most calls
+- In our prediction model, the LOG model was tuned up in a way that favor to the existing data to improve   prediction, at the cost of biasness. This could be one of the factors affecting the accuracy of the combined prediction method. While ANN can provide both a more accurate and less bias prediction, options are clear to us to not use the combined method.
 - Also wanted to lower false negative rate because that is revenue lost
 - We can see with all the models, clusters 1 and 2 are very poor, so consider not calling them
 - Call everyone in cluster 4
@@ -611,5 +612,5 @@ Per 100 customers in group 5
 total out of 100 -> 38.2 buy
 
 for 41k calls in the to be state:
--> 41000(-1) + 15662(6) = 52972 profit using the ANN model on clusters 3 and 5 and calling all in 4
-                          13366 profit using voting scheme on clusters 3 and 5 and calling all in 4
+-> 41000(-1) + 15662(6) = 52972 profit using the ANN model on clusters 3 and 5, and calling all in 4
+                          13366 profit using voting scheme on clusters 3 and 5, and calling all in 4
