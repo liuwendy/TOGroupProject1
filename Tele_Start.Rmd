@@ -584,7 +584,7 @@ confusionMatrix(as.factor(all5$all_prediction), as.factor(tele_test_log$yyes), p
 - In our prediction model, the LOG model was tuned up in a way that favor to the existing data to improve prediction, at the cost of biasness. This could be one of the factors affecting the accuracy of the combined prediction method. While ANN can provide both a more accurate and less bias prediction, options are clear to us to not use the combined method.
 - We can see with all the models, clusters 1 and 2 are very poor, so consider not calling them
 - We want to call everyone in cluster 4.
-- In clusters 3 and 5 use the predictive models created to call with success rate of > 20% which is profitable.
+- In clusters 3 and 5 use the predictive models created to call with success rate of > 20% when using the voting scheme and > 35% when using ANN which is both profitable.
 
 Current State:
 41k
