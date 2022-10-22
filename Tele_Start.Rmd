@@ -592,24 +592,38 @@ Current State:
 -> 41000*(-1) + 5000(6) = -11000
 
 To Be State:
-Per 100 customers in group 4
+
+Per 100 customers in group 4:
+
 8165/21274 (38.4) is the percentage of people we can expect in cluster 4
+
 23.184323% is the buy rate
+
 8.9 buy
 
 
-Per 100 customers in group 3
+Per 100 customers in group 3:
+
 9653/21274 (45.4) is the percentage of people we can expect in cluster 3
+
 47.87% is the buy rate
+
 21.7 buy
 
-Per 100 customers in group 5
+
+Per 100 customers in group 5:
+
 3456/21274 (16.2) is the percentage of people we can expect in cluster 5
+
 47% is the buy rate
+
 7.6 buy
 
 total out of 100 -> 38.2 buy
 
+
 for 41k calls in the to be state:
--> 41000(-1) + 15662(6) = 52972 profit using the ANN model on clusters 3 and 5, and calling all in 4
-                          13366 profit using voting scheme on clusters 3 and 5, and calling all in 4
+
+-> 41000(-1) + 15662(6) = 52972 profit using the ANN model on clusters 3 and 5, and calling all in 4; 
+
+13366 profit using voting scheme on clusters 3 and 5, and calling all in 4
